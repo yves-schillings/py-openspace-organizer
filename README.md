@@ -122,7 +122,7 @@ Then open your browser and navigate to:
    http://127.0.0.1:5000
    ```
 From there you can:
-- Upload a .xlsx file with names
+- Upload a .xlsx file with names (in data folder, use **colleagues.xlsx** file)
 - View the seating arrangement by table and seat
 - Download the output as a .csv file
 - Re-upload another file for a new plan
