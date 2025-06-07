@@ -64,11 +64,13 @@ Combines result.html + management actions (add/remove person or table)
 
         <form method="POST" action="{{ url_for('assign_to_table') }}">
           <input type="hidden" name="name" value="{{ name }}">
+          
           <select name="table_index">
-            {% for t in tables %}
-            <option value="{{ t.table_num }}">Table {{ t.table_num }}</option>
+            {% for i in available_tables %}
+              <option value="{{ i }}">Table {{ i }}</option>
             {% endfor %}
           </select>
+
           <button class="action-button" type="submit">Assign to a table</button>
         </form>
 

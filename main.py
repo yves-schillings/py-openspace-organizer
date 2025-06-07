@@ -59,10 +59,11 @@ def main() -> None:
     print(f"\n{BLUE}>>> Saving seating plan to: {output_file}{RESET}\n")
     room.store(output_file)
 
-    print(f"{GREEN}>>> Program completed successfully.{RESET}\n")
-
     #Launch user interaction menu
     handle_user_choice(room)
+
+    print(f"{GREEN}>>> Program completed successfully.{RESET}\n")
+
 
 def display_menu() -> None:
     """
