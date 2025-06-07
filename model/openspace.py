@@ -3,6 +3,7 @@ from typing import List
 from model.table import Table
 
 
+
 class Openspace:
     def __init__(self, number_of_tables: int, table_capacity: int) -> None:
         # Create tables based on the given configuration
@@ -207,41 +208,15 @@ class Openspace:
 
     
     def add_table(self, capacity: int) -> None:
+        """
+        Add a new table with the specified capacity.
+        Does not automatically assign any unseated people.
+        """
         from model.table import Table
         new_table = Table(capacity)
         self.tables.append(new_table)
         self.number_of_tables += 1
-        print("New table added.")
-
-        if self.unassigned:
-            print("Trying to assign previously unseated people...")
-
-            i = 0
-            still_unassigned = []
-
-            # Remplir la nouvelle table uniquement
-            for seat in new_table.seats:
-                if i >= len(self.unassigned):
-                    break
-                seat.set_occupant(self.unassigned[i])
-                i += 1
-
-            # Récupérer ceux qui n'ont pas été placés
-            still_unassigned = self.unassigned[i:]
-            self.unassigned = still_unassigned
-
-            if not self.unassigned:
-                print("All unassigned people have now been seated.")
-            else:
-                print(f"{len(self.unassigned)} people still have no seat.")
-                print(">>> Still unassigned:")
-                for name in self.unassigned:
-                    print(f" - {name}")
-
-        # Afficher la nouvelle disposition
-        print("\nUpdated Seating Plan:\n")
-        self.display()
-
+        print(f"New table with {capacity} seats added. No one has been assigned automatically.")
 
 
     def remove_table(self, index: int) -> bool:
@@ -288,6 +263,12 @@ class Openspace:
             return False
         
     def remove_person_from_room(self, name: str) -> bool:
+        """
+        Completely remove a person from the room, whether seated or unassigned.
+
+        :param name: Name of the person to remove
+        :return: True if the person was removed, False otherwise
+        """        
         #1. Frtst check if they are seated at a table
         for table in self.tables:
             for seat in table.seats:

@@ -29,17 +29,35 @@ def create_excel_from_csv(csv_path: str, excel_path: str = "data/colleagues.xlsx
     df.to_excel(excel_path, index=False)
 
 
+
+
 def load_colleagues_from_excel(excel_path: str) -> List[str]:
     """
     Load colleague names from an Excel file.
 
-    :param excel_path: Path to the Excel file.
-    :return: List of colleague names.
-    """
-    df = pd.read_excel(excel_path)
+    Parameters:
+    ----------
+    excel_path : str
+        Path to the Excel (.xlsx) file
 
-    # Return the names as a list of strings
-    return df["Name"].dropna().astype(str).str.strip().tolist()
+    Returns:
+    -------
+    List[str]
+        A list of colleague names, cleaned and as strings
+    """
+    try:
+        # Load only the first 1 column, up to 500 rows
+        df = pd.read_excel(excel_path, usecols="A", nrows=500)
+
+        # Automatically use the first column, whatever its name
+        col = df.columns[0]
+        names = df[col].dropna().astype(str).str.strip().tolist()
+        return names
+
+    except Exception as e:
+        print(f"Error while reading Excel: {e}")
+        return []
+
 
 def load_config(filepath: str = "config.json") -> Dict:
     """

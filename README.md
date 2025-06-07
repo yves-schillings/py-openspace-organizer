@@ -52,29 +52,6 @@ This script will:
 
 > After those steps, your environment is fully set up and ready for development or testing.
 
-## Running Unit Tests
-
-Once the Python environment is set up, you can run the test suite to validate the project components.
-
-1. **Make the setup script executable** 
-    ```bash
-    chmod +x run-test.sh
-    ```
-
-2. **Run the setup script**
-   ```bash
-   ./run-test.sh
-   ```
-
-This script will:
-- Activate the virtual environment.
-- Run all unit tests using pytest.
-- Display test coverage statistics.
-- Highlight which parts of the code are not yet covered by tests.
-- Exit with an error if any test fails.
-  
-> This ensures your project stays robust, maintainable, and production-ready.
-
 ## Running the Application
 
 You can run this project in two different modes depending on your use case:
@@ -128,6 +105,41 @@ From there you can:
 - Re-upload another file for a new plan
 
 >The web mode uses the config.json file to determine parameters like number of tables and seats per table.
+
+### Dynamic Configuration via config.json
+The program automatically reads its setup from a `config.json` file located in the project root. This allows you to easily configure the room layout and input/output paths without modifying the Python code.
+
+Example content of `config.json`:
+
+```json
+{
+  "input_csv": "data/colleagues.xlsx",
+  "output_csv": "data/output.csv",
+  "output_excel": "data/colleagues.xlsx",
+  "tables": 6,
+  "seats_per_table": 4
+}
+```
+
+### Parameter Breakdown
+
+- **`input_csv`** *(string)*  
+  Path to the Excel file that contains the list of colleagues. This file will be used to load the names to assign.
+
+- **`output_csv`** *(string)*  
+  Path where the program will write the final seating arrangement as a `.csv` file. Useful for external sharing or historical tracking.
+
+- **`output_excel`** *(string)*  
+  *(Optional)* If present, the program will also export the final seating arrangement to an Excel file at this location.
+
+- **`tables`** *(integer)*  
+  Number of tables available in the open space. For example, `6` tables.
+
+- **`seats_per_table`** *(integer)*  
+  Number of seats per table. For example, `4` seats per table means a total capacity of 24 people.
+
+*By editing this file, you can adapt the room layout and input/output behavior without changing a single line of Python code.*
+
 
 ## Feature Implementation Checklist
 
