@@ -9,16 +9,121 @@ h1 {
     color: #0055cc;
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
+.tables-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
+.table-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px 16px 10px 16px; /* Bottom padding reduced from default */
+  width: 280px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
+.table-card h2 {
+    margin: 0 0 10px;
+}
+
+.table-card ul {
+    margin-bottom: 16px;
+    padding-left: 0;
+    list-style: none;
+}
+
+/* Align and reduce spacing below the "Remove This Table" button */
+.table-card form {
+  display: flex;
+  justify-content: center;    /* Center the button horizontally */
+  margin-bottom: 4px;         /* Reduce spacing after the button */
+  margin-top: 6px;            /* Add slight space above the button */
+}
+
+/* Compact button styling */
+button.action-button {
+  padding: 4px 8px;           /* Smaller padding for a compact look */
+  font-size: 13px;            /* Slightly smaller font size */
+}
+
+.seat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;               /* Reduce horizontal spacing between elements */
+  margin-bottom: 4px;     /* Reduce vertical spacing between seat rows */
+}
+
+.seat-item span {
+  flex: 1;
+  white-space: nowrap;        /* Prevent line breaks */
+  overflow: hidden;           /* Hide text overflow */
+  text-overflow: ellipsis;    /* Show "..." if text overflows */
+}
+
+
+.unseated-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1.2em; /* space before dropdowns */
+  max-width: 100%;
+}
+
+.unseated-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: nowrap;
+}
+
+.unseated-item span {
+  flex: 0 0 120px;
+  text-align: right;
+}
+
+.unseated-item form {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+button.action-button {
+    background-color: #e6f0fa;
+    color: #2c3e50;
+    border: 1px solid #bcd;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+button.action-button:hover {
+    background-color: #d0e7fa;
+    border-color: #a5c5e4;
+}
+
+button.action-button.danger {
+    background-color: #f9e6e6;
+    color: #8a1f1f;
+    border: 1px solid #e3bcbc;
+}
+
+button.action-button.danger:hover {
+    background-color: #f2cfcf;
+    border-color: #d89a9a;
+}
+
+form[action*="store_csv"] button,
+form[action*="index"] button {
+  margin-top: 12px;
 }

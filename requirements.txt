@@ -10,3 +10,6 @@ openpyxl>=3.1
 black>=23.1.0
 
 Flask>=2.2.2
+
+# Excel file
+xlsxwriter>=3.1.2
