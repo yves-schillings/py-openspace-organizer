@@ -113,8 +113,7 @@ def upload():
         # Validate names (only alphabetic)
         invalid_names = [name for name in names if not str(name).strip().isalpha()]
         if invalid_names:
-            # Convert to string for cleaner display
-            invalid_str = ', '.join(str(name) for name in invalid_names)
+            invalid_str = ', '.join([str(n) for n in invalid_names])
             return render_template('upload.html', error=f"Invalid names found: {invalid_str}")
 
         config = load_config()
@@ -125,7 +124,6 @@ def upload():
 
     except Exception as e:
         return render_template('upload.html', error=f"Unexpected error: {str(e)}")
-
 
 
 
@@ -147,8 +145,19 @@ def dashboard():
         tables_data.append({"table_num": i, "seats": seats})
 
     unseated = room.get_unseated_people()
-    return render_template('dashboard.html', tables=tables_data, unseated=unseated)
+    
+    
+    # Creaet a liste of table with free seats only 
+    tables_with_free_seats = [
+        i + 1 for i, table in enumerate(room.tables) if table.has_free_spot()
+    ]
 
+    return render_template(
+        'dashboard.html',
+        tables=tables_data,
+        unseated=unseated,
+        available_tables=tables_with_free_seats
+    )
 
 
 @app.route('/add_person', methods=['POST'])
