@@ -72,15 +72,11 @@ from flask import send_file
 from io import BytesIO
 import pandas as pd
 
-global room
-
+room = None  # Global variable to hold the Openspace instance
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 app = Flask(__name__)
-
-# Global variable to hold the Openspace instance
-global room
 
 # Folder where uploaded files will be stored
 UPLOAD_FOLDER = 'uploads'
@@ -96,41 +92,42 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    """
-    Handle the uploaded Excel file:
-    - Save the file to the uploads folder
-    - Load names and configuration
-    - Initialize the Openspace object
-    - Organize seating and eliminate lonely seats
-    - Redirect to the interactive dashboard
-    """
     global room
 
     if 'file' not in request.files:
-        return "No file part", 400
+        return render_template('upload.html', error="No file part detected.")
 
     file = request.files['file']
     if file.filename == '':
-        return "No file selected", 400
+        return render_template('upload.html', error="No file selected.")
 
-    if file and file.filename.endswith('.xlsx'):
+    if not file.filename.endswith('.xlsx'):
+        return render_template('upload.html', error="Invalid file format. Please upload a .xlsx file.")
+
+    try:
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filepath)
 
         names = load_colleagues_from_excel(filepath)
+
+        # Validate names (only alphabetic)
+        invalid_names = [name for name in names if not str(name).strip().isalpha()]
+        if invalid_names:
+            # Convert to string for cleaner display
+            invalid_str = ', '.join(str(name) for name in invalid_names)
+            return render_template('upload.html', error=f"Invalid names found: {invalid_str}")
+
         config = load_config()
-        tables = config.get("tables", 6)
-        seats_per_table = config.get("seats_per_table", 4)
-
-        room = Openspace(tables, seats_per_table)
+        room = Openspace(config["tables"], config["seats_per_table"])
         room.organize(names)
-
-        #if room.is_there_lonely_person():
-        #    room.eliminate_lonely_tables()
 
         return redirect(url_for('dashboard'))
 
-    return "Invalid file format. Please upload an .xlsx file.", 400
+    except Exception as e:
+        return render_template('upload.html', error=f"Unexpected error: {str(e)}")
+
+
+
 
     
 
@@ -286,6 +283,39 @@ def assign_to_table():
                 room.unassigned.remove(name)
             print(f"{name} has been manually assigned to table {table_index}.")
     return redirect(url_for('dashboard'))
+
+@app.route('/uploading', methods=['POST'])
+def uploading():
+    """
+    Intermediate page to show spinner, then redirect to actual /upload
+    """
+    # Save the file temporarily in session or filesystem
+    uploaded_file = request.files['file']
+    filename = uploaded_file.filename
+    temp_path = os.path.join('uploads', filename)
+    uploaded_file.save(temp_path)
+
+    # Store the path in a cookie or session if needed
+    response = render_template('uploading.html', filename=filename)
+    return response
+
+@app.route('/upload')
+def process_upload():
+    filename = request.args.get('filename')
+    filepath = os.path.join('uploads', filename)
+    
+    if not os.path.exists(filepath):
+        return "Upload failed", 400
+
+    # Process as usual
+    names = load_colleagues_from_excel(filepath)
+    config = load_config()
+    room = Openspace(config["tables"], config["seats_per_table"])
+    room.organize(names)
+
+    return redirect(url_for('dashboard'))
+
+
 
 if __name__ == '__main__':
     # Run Flask app in debug mode for development
