@@ -63,8 +63,8 @@ You can run this project in two different modes depending on your use case:
 - **Command-line interface (CLI)** — for quick testing or automation
 - **Web interface** — for a more user-friendly experience via a browser
 
-### Run the main.py in the shell
-To start the main.py from your Git Bash terminal in Visual Studio Code, execute:
+### Run the Command-line interface (CLI)
+To run the `main.py` script from your Git Bash terminal within Visual Studio Code, follow these steps:
 
 1. **Make the setup script executable** 
     ```bash
