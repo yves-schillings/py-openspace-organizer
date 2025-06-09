@@ -1,4 +1,4 @@
-# Openspace Project
+# Openspace Organizer
 
 ## Prerequisites
 
